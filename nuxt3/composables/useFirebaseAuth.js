@@ -31,19 +31,19 @@ export default (options = {}) => {
           const provider = new fireAuth.GoogleAuthProvider();
           // provider.addScope("https://www.googleapis.com/auth/contacts.readonly");
 
-          provider.setCustomParameters({ prompt: "select_account" });
-          try {
-            await fireAuth.signInWithPopup(auth, provider); // Use 'provider' directly here
-          } catch (error) {
-            alert(error.message);
-          }
+          // provider.setCustomParameters({ prompt: "select_account" });
+          // try {
+          //   await fireAuth.signInWithPopup(auth, provider); // Use 'provider' directly here
+          // } catch (error) {
+          //   alert(error.message);
+          // }
 
           // const result = await fireAuth.signInWithPopup(auth, provider);
           // const credential = fireAuth.GoogleAuthProvider.credentialFromResult(result);
           // console.log({ result, credential });
 
-          // const aaa = await fireAuth.signInWithRedirect(auth, provider);
-          // console.log("aaa", aaa);
+          const aaa = await fireAuth.signInWithRedirect(auth, provider);
+          console.log("aaa", aaa);
         },
       };
 

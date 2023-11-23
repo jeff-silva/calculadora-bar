@@ -1,8 +1,8 @@
 <template>
   <div>
     <v-btn @click="auth.login('google')">Google Login</v-btn>
-    <pre>auth: {{ auth }}</pre>
-    <pre>user: {{ user }}</pre>
+    <!-- <pre>auth: {{ auth }}</pre> -->
+    <!-- <pre>user: {{ user }}</pre> -->
   </div>
 </template>
 
