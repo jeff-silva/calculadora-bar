@@ -6,6 +6,7 @@ export default defineNuxtConfig({
   css: ['@/app.scss'],
 
   app: {
+    baseURL: '/calculadora-bar',
     buildAssetsDir: 'assets',
     head: {
       charset: 'utf-8',
