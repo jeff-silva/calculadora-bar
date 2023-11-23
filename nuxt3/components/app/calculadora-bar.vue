@@ -22,7 +22,6 @@
                     </v-row>
                     <br />
                     <v-card-actions>
-                      <v-spacer />
                       <v-btn class="bg-error" prepend-icon="mdi-delete" @click="calc.people.remove(o)">Delete</v-btn>
                     </v-card-actions>
                   </v-expansion-panel-text>
@@ -32,7 +31,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer />
-            <v-btn @click="calc.people.add()">Criar</v-btn>
+            <v-btn @click="calc.people.add()" class="bg-success">Criar</v-btn>
           </v-card-actions>
         </v-card>
 
@@ -58,7 +57,7 @@
                         <v-money label="Preço" v-model="o.amount" mask="money" />
                       </v-col>
                       <v-col cols="4">
-                        <v-text-field label="Quantidade" v-model="o.quantity" type="number" />
+                        <v-text-field label="Quantidade" v-model="o.quantity" type="number" min="1" />
                       </v-col>
                       <v-col cols="12">
                         <v-select
@@ -73,7 +72,6 @@
                     </v-row>
                     <br />
                     <v-card-actions>
-                      <v-spacer />
                       <v-btn class="bg-error" prepend-icon="mdi-delete" @click="calc.products.remove(o)">Delete</v-btn>
                     </v-card-actions>
                   </v-expansion-panel-text>
@@ -83,7 +81,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer />
-            <v-btn @click="calc.products.add()">Criar</v-btn>
+            <v-btn @click="calc.products.add()" class="bg-success">Criar</v-btn>
           </v-card-actions>
         </v-card>
 
@@ -99,12 +97,18 @@
                     <td>{{ o.total }}</td>
                   </tr>
                 </template>
+
+                <tr>
+                  <td></td>
+                  <td class="text-right">Total:</td>
+                  <td>{{ calc.result.total }}</td>
+                </tr>
               </tbody>
             </v-table>
           </v-card-text>
         </v-card>
       </div>
-      <pre>{{ calc }}</pre>
+      <!-- <pre>{{ calc }}</pre> -->
     </v-defaults-provider>
   </v-container>
 </template>
@@ -181,10 +185,7 @@ const calc = reactive({
     };
 
     result.total = calc.products.items.reduce((total, prod) => {
-      // const amount = parseFloat((prod.amount || "0").replace(/[^0-9]/g, "")) / 100;
-      // const quantity = parseFloat(prod.quantity);
-      // return total + amount * quantity;
-      return 0;
+      return total + prod.amount * prod.quantity;
     }, 0);
 
     calc.people.items.map((person) => {
@@ -193,9 +194,7 @@ const calc = reactive({
       });
 
       const total = products.reduce((total, prod) => {
-        // const amount = parseFloat((prod.amount || "0").replace(/[^0-9]/g, "")) / 100;
-        // const quantity = parseFloat(prod.quantity);
-        // return total + (amount * quantity) / prod.divideBy.length;
+        return total + (prod.amount * prod.quantity) / prod.divideBy.length;
         return 0;
       }, 0);
 
@@ -215,10 +214,12 @@ const calc = reactive({
 const defaultsProviderInputs = { variant: "outlined", hideDetails: true };
 
 const defaultsProvider = {
+  // global: { rounded: 0 },
   VTextField: defaultsProviderInputs,
   VSelect: defaultsProviderInputs,
   VTextarea: defaultsProviderInputs,
-  VCard: { class: "bg-grey-lighten-3", elevation: 0 },
   VExpansionPanelText: { class: "pt-3" },
+  VCard: { class: "bg-grey-lighten-3", elevation: 0 },
+  VCardActions: { class: "px-4" },
 };
 </script>
