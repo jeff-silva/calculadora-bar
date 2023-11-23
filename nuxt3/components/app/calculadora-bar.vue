@@ -1,116 +1,114 @@
 <template>
-  <v-container style="max-width: 800px">
-    <v-defaults-provider :defaults="defaultsProvider">
-      <div class="d-flex flex-column" style="gap: 25px">
-        <v-card>
-          <v-card-title>Pessoas</v-card-title>
-          <v-card-text>
-            <v-expansion-panels variant="accordion" v-model="calc.people.focus">
-              <template v-for="o in calc.people.items">
-                <v-expansion-panel :value="o">
-                  <v-expansion-panel-title>
-                    {{ o.name || "Sem nome" }}
-                  </v-expansion-panel-title>
-                  <v-expansion-panel-text>
-                    <v-row>
-                      <v-col cols="12">
-                        <v-text-field label="Nome" v-model="o.name" />
-                      </v-col>
-                      <v-col cols="12">
-                        <v-textarea label="Observação" v-model="o.observation" auto-grow />
-                      </v-col>
-                    </v-row>
-                    <br />
-                    <v-card-actions>
-                      <v-btn class="bg-error" prepend-icon="mdi-delete" @click="calc.people.remove(o)">Delete</v-btn>
-                    </v-card-actions>
-                  </v-expansion-panel-text>
-                </v-expansion-panel>
-              </template>
-            </v-expansion-panels>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer />
-            <v-btn @click="calc.people.add()" class="bg-success">Criar</v-btn>
-          </v-card-actions>
-        </v-card>
+  <v-defaults-provider :defaults="defaultsProvider">
+    <div class="d-flex flex-column" style="gap: 25px">
+      <v-card>
+        <v-card-title>Pessoas</v-card-title>
+        <v-card-text>
+          <v-expansion-panels variant="accordion" v-model="calc.people.focus">
+            <template v-for="o in calc.people.items">
+              <v-expansion-panel :value="o">
+                <v-expansion-panel-title>
+                  {{ o.name || "Sem nome" }}
+                </v-expansion-panel-title>
+                <v-expansion-panel-text>
+                  <v-row>
+                    <v-col cols="12">
+                      <v-text-field label="Nome" v-model="o.name" />
+                    </v-col>
+                    <v-col cols="12">
+                      <v-textarea label="Observação" v-model="o.observation" auto-grow />
+                    </v-col>
+                  </v-row>
+                  <br />
+                  <v-card-actions>
+                    <v-btn class="bg-error" prepend-icon="mdi-delete" @click="calc.people.remove(o)">Delete</v-btn>
+                  </v-card-actions>
+                </v-expansion-panel-text>
+              </v-expansion-panel>
+            </template>
+          </v-expansion-panels>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn @click="calc.people.add()" class="bg-success">Criar</v-btn>
+        </v-card-actions>
+      </v-card>
 
-        <v-card>
-          <v-card-title>Consumo</v-card-title>
-          <v-card-text>
-            <v-expansion-panels variant="accordion" v-model="calc.products.focus">
-              <template v-for="o in calc.products.items">
-                <v-expansion-panel :value="o">
-                  <v-expansion-panel-title>
-                    <v-row no-gutters>
-                      <v-col cols="6">{{ o.name }}</v-col>
-                      <v-col cols="6">{{ o.quantity }} x {{ o.amount }}</v-col>
-                    </v-row>
-                  </v-expansion-panel-title>
-                  <v-expansion-panel-text>
-                    <v-row>
-                      <v-col cols="12">
-                        <v-text-field label="Produto" v-model="o.name" />
-                      </v-col>
-                      <v-col cols="8">
-                        <!-- <v-text-field label="Preço" v-model="o.amount" /> -->
-                        <v-money label="Preço" v-model="o.amount" mask="money" />
-                      </v-col>
-                      <v-col cols="4">
-                        <v-text-field label="Quantidade" v-model="o.quantity" type="number" min="1" />
-                      </v-col>
-                      <v-col cols="12">
-                        <v-select
-                          label="Quem vai consumir?"
-                          v-model="o.divideBy"
-                          :items="calc.people.items"
-                          item-value="uid"
-                          item-title="name"
-                          multiple
-                        />
-                      </v-col>
-                    </v-row>
-                    <br />
-                    <v-card-actions>
-                      <v-btn class="bg-error" prepend-icon="mdi-delete" @click="calc.products.remove(o)">Delete</v-btn>
-                    </v-card-actions>
-                  </v-expansion-panel-text>
-                </v-expansion-panel>
-              </template>
-            </v-expansion-panels>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer />
-            <v-btn @click="calc.products.add()" class="bg-success">Criar</v-btn>
-          </v-card-actions>
-        </v-card>
+      <v-card>
+        <v-card-title>Consumo</v-card-title>
+        <v-card-text>
+          <v-expansion-panels variant="accordion" v-model="calc.products.focus">
+            <template v-for="o in calc.products.items">
+              <v-expansion-panel :value="o">
+                <v-expansion-panel-title>
+                  <v-row no-gutters>
+                    <v-col cols="6">{{ o.name }}</v-col>
+                    <v-col cols="6">{{ o.quantity }} x {{ o.amount }}</v-col>
+                  </v-row>
+                </v-expansion-panel-title>
+                <v-expansion-panel-text>
+                  <v-row>
+                    <v-col cols="12">
+                      <v-text-field label="Produto" v-model="o.name" />
+                    </v-col>
+                    <v-col cols="8">
+                      <!-- <v-text-field label="Preço" v-model="o.amount" /> -->
+                      <v-money label="Preço" v-model="o.amount" mask="money" />
+                    </v-col>
+                    <v-col cols="4">
+                      <v-text-field label="Quantidade" v-model="o.quantity" type="number" min="1" />
+                    </v-col>
+                    <v-col cols="12">
+                      <v-select
+                        label="Quem vai consumir?"
+                        v-model="o.divideBy"
+                        :items="calc.people.items"
+                        item-value="uid"
+                        item-title="name"
+                        multiple
+                      />
+                    </v-col>
+                  </v-row>
+                  <br />
+                  <v-card-actions>
+                    <v-btn class="bg-error" prepend-icon="mdi-delete" @click="calc.products.remove(o)">Delete</v-btn>
+                  </v-card-actions>
+                </v-expansion-panel-text>
+              </v-expansion-panel>
+            </template>
+          </v-expansion-panels>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn @click="calc.products.add()" class="bg-success">Criar</v-btn>
+        </v-card-actions>
+      </v-card>
 
-        <v-card>
-          <v-card-title>Rateio</v-card-title>
-          <v-card-text>
-            <v-table>
-              <tbody>
-                <template v-for="o in calc.result.people">
-                  <tr>
-                    <td>{{ o.person.name }}</td>
-                    <td>{{ o.products.map((p) => `${p.quantity} ${p.name}`).join(", ") }}</td>
-                    <td>{{ o.total }}</td>
-                  </tr>
-                </template>
-
+      <v-card>
+        <v-card-title>Rateio</v-card-title>
+        <v-card-text>
+          <v-table>
+            <tbody>
+              <template v-for="o in calc.result.people">
                 <tr>
-                  <td></td>
-                  <td class="text-right">Total:</td>
-                  <td>{{ calc.result.total }}</td>
+                  <td>{{ o.person.name }}</td>
+                  <td>{{ o.products.map((p) => `${p.quantity} ${p.name}`).join(", ") }}</td>
+                  <td>{{ o.total }}</td>
                 </tr>
-              </tbody>
-            </v-table>
-          </v-card-text>
-        </v-card>
-      </div>
-      <!-- <pre>{{ calc }}</pre> -->
-    </v-defaults-provider>
-  </v-container>
+              </template>
+
+              <tr>
+                <td></td>
+                <td class="text-right">Total:</td>
+                <td>{{ calc.result.total }}</td>
+              </tr>
+            </tbody>
+          </v-table>
+        </v-card-text>
+      </v-card>
+    </div>
+    <!-- <pre>{{ calc }}</pre> -->
+  </v-defaults-provider>
 </template>
 
 <script setup>

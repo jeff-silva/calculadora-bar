@@ -139,4 +139,9 @@ export default class {
   static async storageSearch() {}
 
   static async storageDelete() {}
+
+  static async onAuthStateChanged(callback) {
+    const { auth, fireAuth } = await this.getData();
+    return fireAuth.onAuthStateChanged(auth, callback);
+  }
 }
