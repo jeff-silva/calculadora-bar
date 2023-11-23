@@ -43,7 +43,10 @@
               <template v-for="o in calc.products.items">
                 <v-expansion-panel :value="o">
                   <v-expansion-panel-title>
-                    {{ o.name || "Sem nome" }}
+                    <v-row no-gutters>
+                      <v-col cols="6">{{ o.name }}</v-col>
+                      <v-col cols="6">{{ o.quantity }} x {{ o.amount }}</v-col>
+                    </v-row>
                   </v-expansion-panel-title>
                   <v-expansion-panel-text>
                     <v-row>
@@ -51,7 +54,8 @@
                         <v-text-field label="Produto" v-model="o.name" />
                       </v-col>
                       <v-col cols="8">
-                        <v-text-field label="Preço" v-model="o.amount" />
+                        <!-- <v-text-field label="Preço" v-model="o.amount" /> -->
+                        <v-money label="Preço" v-model="o.amount" mask="money" />
                       </v-col>
                       <v-col cols="4">
                         <v-text-field label="Quantidade" v-model="o.quantity" type="number" />
@@ -100,7 +104,7 @@
           </v-card-text>
         </v-card>
       </div>
-      <!-- <pre>{{ calc.result }}</pre> -->
+      <pre>{{ calc }}</pre>
     </v-defaults-provider>
   </v-container>
 </template>
@@ -177,9 +181,10 @@ const calc = reactive({
     };
 
     result.total = calc.products.items.reduce((total, prod) => {
-      const amount = parseFloat((prod.amount || "0").replace(/[^0-9]/g, "")) / 100;
-      const quantity = parseFloat(prod.quantity);
-      return amount * quantity;
+      // const amount = parseFloat((prod.amount || "0").replace(/[^0-9]/g, "")) / 100;
+      // const quantity = parseFloat(prod.quantity);
+      // return total + amount * quantity;
+      return 0;
     }, 0);
 
     calc.people.items.map((person) => {
@@ -188,9 +193,10 @@ const calc = reactive({
       });
 
       const total = products.reduce((total, prod) => {
-        const amount = parseFloat((prod.amount || "0").replace(/[^0-9]/g, "")) / 100;
-        const quantity = parseFloat(prod.quantity);
-        return (amount * quantity) / prod.divideBy.length;
+        // const amount = parseFloat((prod.amount || "0").replace(/[^0-9]/g, "")) / 100;
+        // const quantity = parseFloat(prod.quantity);
+        // return total + (amount * quantity) / prod.divideBy.length;
+        return 0;
       }, 0);
 
       result.people.push({ total, person, products });
