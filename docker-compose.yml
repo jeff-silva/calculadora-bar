@@ -1,0 +1,24 @@
+version: "3"
+services:
+  nuxt3:
+    image: node:18.16.0
+    working_dir: /nuxt3
+    command: bash -c "yarn install && yarn dev"
+    env_file: .env
+    ports:
+      - ${NUXT_PORT:-3000}:3000
+      - ${VITE_PORT:-24678}:${VITE_PORT:-24678}
+    volumes:
+      - ./nuxt3:/nuxt3
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true
+      - HOST=${NUXT_HOST:-0.0.0.0}
+      - PORT=${NUXT_PORT:-3000}
+  # old:
+  #   image: httpd:latest
+  #   working_dir: /old
+  #   ports:
+  #     - "8080:80"
+  #   volumes:
+  #     - ./old:/usr/local/apache2/htdocs
