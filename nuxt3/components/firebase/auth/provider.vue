@@ -7,8 +7,8 @@
 <script setup>
 import { reactive, defineProps, defineEmits } from "vue";
 
-import useFirebase from "@/composables/useFirebase";
-const f = useFirebase();
+import useFirebaseStore from "@/composables/useFirebaseStore";
+const f = useFirebaseStore();
 
 const slotBind = (merge = {}) => {
   return {
