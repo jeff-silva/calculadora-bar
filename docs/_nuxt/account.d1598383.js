@@ -1,1 +1,0 @@
-import{_ as e}from"./nuxt-layout.13138877.js";import{L as a,A as o,t as _,B as n}from"./entry.9bba3c69.js";const i={__name:"account",props:{modelValue:{type:[String],default:""}},emits:["update:modelValue"],setup(m,{emit:c}){return(r,p)=>{const t=e;return _(),a(t,{name:"auth"},{main:o(()=>[n(" xxx ")]),_:1})}}};export{i as default};
