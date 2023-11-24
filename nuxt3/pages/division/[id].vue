@@ -1,4 +1,5 @@
 <!-- TODO: Só pode editar se for proprietário, do contrário, só com permissão -->
+<!-- TODO: Botão de compartilhamento -->
 <template>
   <nuxt-layout name="app">
     <template #main>
@@ -25,7 +26,7 @@
                 />
               </template>
             </v-card-text>
-            <v-card-actions>
+            <v-card-actions v-if="f.user">
               <v-spacer />
               <v-btn @click="form.userAdd()">Nova Pessoa</v-btn>
             </v-card-actions>
@@ -54,7 +55,16 @@
                           <v-money v-model="o.amount" label="Preço" :hide-details="true" />
                         </v-col>
                         <v-col cols="4">
-                          <v-text-field v-model.number="o.quantity" label="Quant." type="number" :hide-details="true" />
+                          <v-text-field
+                            v-model.number="o.quantity"
+                            label="Quant."
+                            type="number"
+                            :hide-details="true"
+                            :prepend-inner-icon="f.user ? 'mdi-minus' : null"
+                            :append-inner-icon="f.user ? 'mdi-plus' : null"
+                            @click:prependInner="o.quantity = Math.max(1, o.quantity - 1)"
+                            @click:appendInner="o.quantity++"
+                          />
                         </v-col>
                         <v-col cols="12">
                           <v-select
@@ -76,7 +86,7 @@
                 </template>
               </v-expansion-panels>
             </v-card-text>
-            <v-card-actions>
+            <v-card-actions v-if="f.user">
               <v-spacer />
               <v-btn @click="form.purchaseAdd()">Novo Gasto</v-btn>
             </v-card-actions>
@@ -98,7 +108,7 @@
                     <v-expansion-panel-title>
                       <v-row>
                         <v-col cols="6">{{ o.user.name }}</v-col>
-                        <v-col cols="6">{{ o.total }}</v-col>
+                        <v-col cols="6">{{ format.money(o.total) }}</v-col>
                       </v-row>
                     </v-expansion-panel-title>
                     <v-expansion-panel-text style="margin: -6px -24px -14px">
@@ -107,10 +117,9 @@
                           <template v-for="oo in o.purchases">
                             <tr>
                               <td>{{ oo.purchase.name }}</td>
-                              <td>{{ oo.total }}</td>
-                              <td class="text-disabled">
-                                {{ oo.purchase.amount }} / {{ oo.purchase.divideBy.length }}
-                              </td>
+                              <td>{{ format.money(oo.purchase.amount) }}</td>
+                              <td>/ {{ oo.purchase.divideBy.length }}</td>
+                              <td class="font-weight-bold">= {{ format.money(oo.total) }}</td>
                             </tr>
                           </template>
                         </tbody>
@@ -129,6 +138,7 @@
 
 <script setup>
 import { reactive, defineProps, defineEmits, computed } from "vue";
+import format from "@/utils/format";
 
 const route = useRoute();
 const router = useRouter();
