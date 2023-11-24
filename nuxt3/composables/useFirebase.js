@@ -1,3 +1,5 @@
+// TODO: Remover este arquivo e todas as suas referências
+
 import { reactive } from "vue";
 
 import * as fireApp from "firebase/app";

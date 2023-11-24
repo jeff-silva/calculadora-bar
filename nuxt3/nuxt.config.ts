@@ -46,6 +46,7 @@ export default defineNuxtConfig({
     },
 
     // ["nuxt-security", {}],
+    ["@pinia/nuxt", {}],
   ],
   vite: {
     vue: {

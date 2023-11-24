@@ -1,3 +1,5 @@
+// TODO: Remover este arquivo e todas as suas referências
+
 import * as fireApp from "firebase/app";
 import * as fireAuth from "firebase/auth";
 import * as fireFirestore from "firebase/firestore";

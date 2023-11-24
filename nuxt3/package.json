@@ -12,6 +12,7 @@
   "devDependencies": {
     "@iconify/vue": "^4.1.1",
     "@nuxt/devtools": "latest",
+    "@pinia/nuxt": "^0.5.1",
     "@vueuse/core": "^10.6.1",
     "axios": "^1.6.1",
     "firebase": "^10.6.0",
@@ -19,6 +20,7 @@
     "lodash": "^4.17.21",
     "nuxt": "^3.8.1",
     "nuxt-security": "^1.0.0-rc.4",
+    "pinia": "^2.1.7",
     "sass": "^1.69.5",
     "vite-plugin-vuetify": "^1.0.2",
     "vue": "^3.3.8",
