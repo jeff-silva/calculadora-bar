@@ -1,8 +1,16 @@
 <template>
-  <nuxt-layout name="auth">
+  <nuxt-layout name="app">
     <template #main>
       <!-- <app-calculadora-bar /> -->
-      xxx
+      Hello!
+
+      <v-btn to="/auth">Login</v-btn>
+      <v-btn to="/division">division</v-btn>
     </template>
   </nuxt-layout>
 </template>
+
+<script setup>
+import useFirebaseStore from "@/stores/useFirebaseStore";
+const f = useFirebaseStore();
+</script>

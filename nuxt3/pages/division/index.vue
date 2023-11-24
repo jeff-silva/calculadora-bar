@@ -21,6 +21,7 @@
 
 <script setup>
 import { reactive, defineProps, defineEmits } from "vue";
+definePageMeta({ middleware: ["auth"] });
 
 const props = defineProps({
   modelValue: {

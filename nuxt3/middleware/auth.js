@@ -1,13 +1,21 @@
 import useFirebaseStore from "@/stores/useFirebaseStore";
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
+  if (to.path == "/auth") return;
   const f = useFirebaseStore();
 
-  f.event.on("onAuthStateChanged", () => {
-    // console.log(f.user);
-    // console.log({ from, to, f });
-    if (!f.user && to.path !== "/auth") {
-      return navigateTo("/auth");
+  const logged = await new Promise((resolve, reject) => {
+    if (f.ready) {
+      return resolve(f.user);
     }
+
+    f.event.on("onAuthStateChanged", () => {
+      resolve(f.user);
+    });
   });
+
+  if (!logged) {
+    const route = useRoute();
+    return navigateTo(`/auth?redirect=${route.fullPath}`);
+  }
 });

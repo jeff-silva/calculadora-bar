@@ -2,7 +2,7 @@
   <v-app>
     <v-defaults-provider :defaults="defaults">
       <v-row no-gutters class="w-100 h-100 layout-auth__bg-pattern">
-        <v-col cols="12" md="6" class="d-none d-md-block">a</v-col>
+        <v-col cols="12" md="6" class="d-none d-md-block"></v-col>
         <v-col cols="12" md="6" class="d-flex align-center justify-center">
           <div style="min-width: 300px; max-width: 90vw">
             <v-card>

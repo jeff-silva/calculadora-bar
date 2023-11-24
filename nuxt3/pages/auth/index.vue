@@ -30,6 +30,7 @@
 
 <script setup>
 import { reactive } from "vue";
+const route = useRoute();
 const router = useRouter();
 
 const data = reactive({
@@ -41,6 +42,6 @@ import useFirebaseStore from "@/stores/useFirebaseStore";
 const f = useFirebaseStore();
 
 f.event.on("loginSuccess", () => {
-  router.push(`/division`);
+  router.push(route.query.redirect || "/");
 });
 </script>
