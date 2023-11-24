@@ -6,8 +6,8 @@ export default defineNuxtConfig({
   css: ['@/app.scss'],
 
   app: {
-    baseURL: '/calculadora-bar',
-    // buildAssetsDir: 'assets',
+    baseURL: '/calculadora-bar/',
+    buildAssetsDir: 'nuxt-assets',
     head: {
       charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1',
