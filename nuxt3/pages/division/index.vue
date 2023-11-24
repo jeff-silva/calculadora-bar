@@ -44,8 +44,8 @@ const division = reactive({
   },
 });
 
-f.on("onAuthStateChanged", async () => {
-  division.query.where = [["ownerUID", "==", f.user.uid]];
-  await division.submit();
-});
+// f.on("onAuthStateChanged", async () => {
+//   division.query.where = [["ownerUID", "==", f.user.uid]];
+//   await division.submit();
+// });
 </script>

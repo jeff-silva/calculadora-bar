@@ -3,75 +3,59 @@
     <!-- Loading -->
     <div v-if="!f.ready">Carregando</div>
 
-    <!-- Unlogged -->
-    <div v-if="f.ready && !f.user">
-      <v-row no-gutters class="layout-auth__bg-pattern" style="height: 100vh">
-        <v-col cols="12" md="6" class="d-none d-md-flex align-center justify-center">
-          <!-- <div class="bg-white pa-8 rounded-lg">Mensagem</div> -->
-        </v-col>
-        <v-col cols="12" md="6" class="d-flex align-center justify-center">
-          <div class="bg-white py-10 px-6 rounded-lg elevation-4">
-            <firebase-auth-login />
-            <!-- <firebase-auth-register /> -->
-          </div>
-        </v-col>
-      </v-row>
-    </div>
+    <v-app-layout navigation-class="bg-grey-lighten-3" v-if="f.ready">
+      <template #main="bind">
+        <v-container style="max-width: 600px">
+          <slot name="main"></slot>
+        </v-container>
+      </template>
 
-    <!-- Logged -->
-    <div v-if="f.ready && f.user">
-      <v-app-layout navigation-class="bg-grey-lighten-3">
-        <template #main="bind">
-          <v-container style="max-width: 600px">
-            <slot name="main"></slot>
-          </v-container>
-        </template>
+      <template #navigation>
+        <div v-if="f.user" class="bg-grey-lighten-2 text-center py-10">Hello {{ f.user.name }}</div>
+        <v-nav
+          v-if="f.user"
+          class="flex-grow-1"
+          :items="[
+            {
+              title: 'Criar conta',
+              icon: 'material-symbols:add',
+              bind: { to: '/division/new' },
+            },
+            {
+              title: 'Contas',
+              icon: 'material-symbols:list-alt-outline-sharp',
+              bind: { to: '/division' },
+            },
+            {
+              title: 'Meus dados',
+              icon: 'ic:sharp-manage-accounts',
+              bind: { to: '/account' },
+            },
+          ]"
+        />
 
-        <template #navigation>
-          <div class="bg-grey-lighten-2 text-center py-10">Hello {{ f.user.name }}</div>
-          <v-nav
-            class="flex-grow-1"
-            :items="[
-              {
-                title: 'Criar conta',
-                icon: 'material-symbols:add',
-                bind: { to: '/division/new' },
-              },
-              {
-                title: 'Contas',
-                icon: 'material-symbols:list-alt-outline-sharp',
-                bind: { to: '/division' },
-              },
-              {
-                title: 'Meus dados',
-                icon: 'ic:sharp-manage-accounts',
-                bind: { to: '/account' },
-              },
-            ]"
-          />
-
-          <v-nav
-            :items="[
-              {
-                title: 'Sair',
-                icon: 'ic:outline-logout',
-                bind: {
-                  onClick() {
-                    f.auth.logout();
-                  },
+        <v-nav
+          v-if="f.user"
+          :items="[
+            {
+              title: 'Sair',
+              icon: 'ic:outline-logout',
+              bind: {
+                onClick() {
+                  f.auth.logout();
                 },
               },
-            ]"
-          />
-        </template>
-      </v-app-layout>
-    </div>
+            },
+          ]"
+        />
+      </template>
+    </v-app-layout>
   </v-app>
 </template>
 
 <script setup>
-import useFirebase from "@/composables/useFirebase";
-const f = useFirebase();
+import useFirebaseStore from "@/stores/useFirebaseStore";
+const f = useFirebaseStore();
 </script>
 
 <style>
