@@ -7,6 +7,12 @@
           <col width="10px" />
         </colgroup>
         <tbody>
+          <tr v-if="division.data.length == 0">
+            <td>
+              Você ainda não criou nenhuma divisão.
+              <nuxt-link to="/division/new">Começar</nuxt-link>
+            </td>
+          </tr>
           <template v-for="o in division.data">
             <tr>
               <td>{{ o.name }}</td>
@@ -32,11 +38,13 @@ const props = defineProps({
 
 const emit = defineEmits(["update:modelValue"]);
 
-import useFirebase from "@/composables/useFirebase";
-const f = useFirebase();
+import useFirebaseStore from "@/stores/useFirebaseStore";
+const f = useFirebaseStore();
 
 const division = reactive({
-  query: {},
+  query: {
+    where: [["ownerUID", "==", f.user.uid]],
+  },
   data: [],
   async submit() {
     const { query, data } = await f.firestore.search("division", this.query);
@@ -45,8 +53,5 @@ const division = reactive({
   },
 });
 
-// f.on("onAuthStateChanged", async () => {
-//   division.query.where = [["ownerUID", "==", f.user.uid]];
-//   await division.submit();
-// });
+division.submit();
 </script>

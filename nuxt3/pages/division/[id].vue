@@ -10,15 +10,18 @@
         <v-text-field label="Nome do evento" v-model="form.data.name" />
         <br />
 
-        <v-card color="grey-lighten-3">
-          <v-card-title>Pessoas</v-card-title>
+        <v-card color="grey-lighten-3" title="Pessoas">
           <v-card-text class="d-flex flex-column" style="gap: 20px">
+            <div v-if="form.data.users.length == 0" class="text-center bg-grey-lighten-4 py-3 text-disabled rounded">
+              Nenhuma pessoa criada
+            </div>
             <template v-for="o in form.data.users">
               <v-text-field
                 v-model="o.name"
                 label="Nome do participante"
                 append-inner-icon="mdi-delete"
                 @click:append-inner="form.userRemove(o)"
+                :hide-details="true"
               />
             </template>
           </v-card-text>
@@ -29,9 +32,14 @@
         </v-card>
         <br />
 
-        <v-card color="grey-lighten-3">
-          <v-card-title>Gastos</v-card-title>
+        <v-card color="grey-lighten-3" title="Gastos">
           <v-card-text>
+            <div
+              v-if="form.data.purchases.length == 0"
+              class="text-center bg-grey-lighten-4 py-3 text-disabled rounded"
+            >
+              Nenhum gasto criado
+            </div>
             <v-expansion-panels v-model="form.focus">
               <template v-for="o in form.data.purchases">
                 <v-expansion-panel :value="o">
@@ -121,8 +129,8 @@ import { reactive, defineProps, defineEmits, computed } from "vue";
 const route = useRoute();
 const router = useRouter();
 
-import useFirebase from "@/composables/useFirebase";
-const f = useFirebase();
+import useFirebaseStore from "@/stores/useFirebaseStore";
+const f = useFirebaseStore();
 
 const props = defineProps({
   modelValue: {
@@ -136,7 +144,7 @@ const emit = defineEmits(["update:modelValue"]);
 import useForm from "@/composables/useForm";
 
 const form = useForm({
-  data: { uid: false, ownerUID: false, name: "", users: [], purchases: [] },
+  data: { uid: false, ownerUID: f.user.uid, name: "", users: [], purchases: [] },
   async onSubmit() {
     const result = await f.firestore.save("division", this.data);
     router.push(`/division/${result.uid}`);
@@ -190,11 +198,8 @@ const form = useForm({
   }),
 });
 
-f.on("onAuthStateChanged", async () => {
-  if (route.params.id != "new") {
-    const division = await f.firestore.find("division", route.params.id);
-    form.fill(division);
-  }
-  form.data.ownerUID = f.user.uid;
-});
+if (route.params.id != "new") {
+  const division = await f.firestore.find("division", route.params.id);
+  form.fill(division);
+}
 </script>
