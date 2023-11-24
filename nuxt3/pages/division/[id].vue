@@ -1,4 +1,4 @@
-<!-- TODO: Tornar tela da divisão visível, mas não editável -->
+<!-- TODO: Só pode editar se for proprietário, do contrário, só com permissão -->
 <template>
   <nuxt-layout name="app">
     <template #main>
@@ -9,7 +9,6 @@
           </v-expand-transition>
 
           <v-text-field label="Nome do evento" v-model="form.data.name" />
-          <br />
 
           <v-card color="grey-lighten-3" title="Pessoas">
             <v-card-text class="d-flex flex-column" style="gap: 20px">
@@ -84,11 +83,10 @@
           </v-card>
           <br />
 
-          <div class="d-flex">
+          <div class="d-flex mb-6" v-if="f.user">
             <v-spacer />
             <v-btn type="submit" color="success" prepend-icon="mdi-check" :loading="form.busy">Salvar</v-btn>
           </div>
-          <br />
 
           <v-card color="grey-lighten-3">
             <v-card-title>Resultados</v-card-title>
@@ -103,7 +101,7 @@
                         <v-col cols="6">{{ o.total }}</v-col>
                       </v-row>
                     </v-expansion-panel-title>
-                    <v-expansion-panel-text>
+                    <v-expansion-panel-text style="margin: -6px -24px -14px">
                       <v-table>
                         <tbody>
                           <template v-for="oo in o.purchases">
