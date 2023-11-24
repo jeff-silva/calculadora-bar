@@ -43,10 +43,19 @@
               title: 'Sair',
               icon: 'ic:outline-logout',
               bind: {
-                onClick() {
-                  f.auth.logout();
-                },
+                onClick: authLogout,
               },
+            },
+          ]"
+        />
+
+        <v-nav
+          v-if="!f.user"
+          :items="[
+            {
+              title: 'Login',
+              icon: 'material-symbols:key-outline',
+              bind: { to: `/auth?redirect=${route.fullPath}` },
             },
           ]"
         />
@@ -58,6 +67,13 @@
 <script setup>
 import useFirebaseStore from "@/stores/useFirebaseStore";
 const f = useFirebaseStore();
+
+const route = useRoute();
+
+const authLogout = async () => {
+  await f.auth.logout();
+  location.reload();
+};
 </script>
 
 <style>
