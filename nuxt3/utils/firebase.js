@@ -13,6 +13,29 @@ export default class {
     return { config, auth, fireApp, fireAuth, fireFirestore, fireFirestoreDB, fireStorage };
   }
 
+  static async authLogin(data = {}) {
+    data = { email: "", password: "", ...data };
+    const { auth, fireAuth } = await this.getData();
+    const result = await fireAuth.signInWithEmailAndPassword(auth, data.email, data.password);
+    console.log(result);
+  }
+
+  static async authLogout() {
+    const { auth, fireAuth } = await this.getData();
+    return await fireAuth.signOut(auth);
+  }
+
+  static async authRegister(data = {}) {
+    data = { email: "", password: "", ...data };
+    const { auth, fireAuth } = await this.getData();
+    const result = await fireAuth.createUserWithEmailAndPassword(auth, data.email, data.password);
+    console.log(result);
+  }
+
+  static async authError(exception) {
+    return { code: "", message: "", customData: {}, name: false, ...exception };
+  }
+
   // static async userCreate() {}
 
   // static async userUpdate() {}

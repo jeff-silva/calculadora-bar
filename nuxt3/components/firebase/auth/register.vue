@@ -7,9 +7,12 @@
       <v-col cols="12">
         <v-text-field v-model="form.data.password" label="Senha" type="password" />
       </v-col>
+      <v-col cols="12">
+        <v-text-field v-model="form.data.password_confirm" label="Repita senha" type="password" />
+      </v-col>
       <v-col cols="12" class="d-flex">
         <v-spacer />
-        <v-btn type="submit">Login</v-btn>
+        <v-btn type="submit">Cadastrar</v-btn>
       </v-col>
     </v-row>
     <pre>{{ form }}</pre>
@@ -25,12 +28,11 @@ const emit = defineEmits(["update:modelValue"]);
 
 const form = reactive({
   busy: false,
-  error: false,
-  data: { email: "", password: "" },
+  data: { email: "", password: "", password_confirm: "" },
   async submit() {
     this.busy = true;
     try {
-      console.log(await f.authLogin(this.data));
+      console.log(await f.authRegister(this.data));
     } catch (e) {
       this.error = await f.authError(e);
     }
