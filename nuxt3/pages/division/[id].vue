@@ -81,10 +81,35 @@
 
         <v-card color="grey-lighten-3">
           <v-card-title>Resultados</v-card-title>
-          <v-card-text> aaa </v-card-text>
+          <v-card-text>
+            <div class="bg-white pa-3 text-right mb-2 elevation-1 rounded">Total: {{ form.result.total }}</div>
+            <v-expansion-panels>
+              <template v-for="o in form.result.division">
+                <v-expansion-panel>
+                  <v-expansion-panel-title>
+                    <v-row>
+                      <v-col cols="6">{{ o.user.name }}</v-col>
+                      <v-col cols="6">{{ o.total }}</v-col>
+                    </v-row>
+                  </v-expansion-panel-title>
+                  <v-expansion-panel-text>
+                    <v-table>
+                      <tbody>
+                        <template v-for="oo in o.purchases">
+                          <tr>
+                            <td>{{ oo.purchase.name }}</td>
+                            <td>{{ oo.total }}</td>
+                            <td class="text-disabled">{{ oo.purchase.amount }} / {{ oo.purchase.divideBy.length }}</td>
+                          </tr>
+                        </template>
+                      </tbody>
+                    </v-table>
+                  </v-expansion-panel-text>
+                </v-expansion-panel>
+              </template>
+            </v-expansion-panels>
+          </v-card-text>
         </v-card>
-
-        <pre>form.result: {{ form.result }}</pre>
       </v-form>
     </template>
   </nuxt-layout>

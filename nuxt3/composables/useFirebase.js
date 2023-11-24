@@ -86,7 +86,68 @@ export default (options = {}) => {
         const docSnap = await fireFirestore.getDoc(docRef);
         return docSnap.exists() ? docSnap.data() : false;
       },
-      async search(collection, params = {}) {},
+      async search(collection, query = {}) {
+        query = {
+          limit: 5,
+          // orderBy: ["uid", "desc"],
+          where: [],
+          startAfter: false,
+          endAt: false,
+          ...query,
+        };
+
+        let prev = false;
+        let next = false;
+
+        const collectRef = fireFirestore.collection(fireFirestoreDB, collection);
+
+        let queryArgs = [];
+
+        if (query.orderBy) {
+          queryArgs.push(fireFirestore.orderBy.apply(null, query.orderBy));
+        }
+
+        if (query.where.length > 0) {
+          query.where.map((condition) => {
+            queryArgs.push(fireFirestore.where.apply(null, condition));
+          });
+        }
+
+        if (query.startAfter) {
+          queryArgs.push(
+            fireFirestore.startAfter(
+              await fireFirestore.getDoc(fireFirestore.doc(fireFirestoreDB, collection, query.startAfter))
+            )
+          );
+        }
+
+        if (query.endAt) {
+          queryArgs.push(
+            fireFirestore.endAt(await fireFirestore.getDoc(fireFirestore.doc(fireFirestoreDB, collection, query.endAt)))
+          );
+        }
+
+        if (query.limit) {
+          queryArgs.push(fireFirestore.limit(query.limit));
+        }
+
+        const docsQuery = fireFirestore.query.apply(null, [collectRef, ...queryArgs]);
+        const docs = await fireFirestore.getDocs(docsQuery);
+
+        let data = [];
+        docs.forEach((doc) => {
+          data.push({ ...doc.data(), uid: doc.id });
+        });
+
+        if (data.length == query.limit) {
+          next = JSON.parse(JSON.stringify(query));
+          next.startAfter = data[data.length - 1]["uid"];
+          next.endAt = false;
+        }
+
+        return { query, data, prev, next };
+      },
+
       async delete(collection, uid) {},
     },
 

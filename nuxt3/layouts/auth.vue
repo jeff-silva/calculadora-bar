@@ -33,9 +33,14 @@
             class="flex-grow-1"
             :items="[
               {
-                title: 'Criar divisão',
+                title: 'Criar conta',
                 icon: 'material-symbols:add',
                 bind: { to: '/division/new' },
+              },
+              {
+                title: 'Contas',
+                icon: 'material-symbols:list-alt-outline-sharp',
+                bind: { to: '/division' },
               },
               {
                 title: 'Meus dados',
