@@ -1,77 +1,39 @@
 <template>
   <v-app>
-    <!-- Loading -->
-    <div v-if="!f.ready">Carregando</div>
-
-    <!-- Unlogged -->
-    <div v-if="f.ready && !f.user">
-      <v-row no-gutters class="layout-auth__bg-pattern" style="height: 100vh">
-        <v-col cols="12" md="6" class="d-none d-md-flex align-center justify-center">
-          <!-- <div class="bg-white pa-8 rounded-lg">Mensagem</div> -->
-        </v-col>
+    <v-defaults-provider :defaults="defaults">
+      <v-row no-gutters class="w-100 h-100 layout-auth__bg-pattern">
+        <v-col cols="12" md="6" class="d-none d-md-block">a</v-col>
         <v-col cols="12" md="6" class="d-flex align-center justify-center">
-          <div class="bg-white py-10 px-6 rounded-lg elevation-4">
-            <firebase-auth-login />
-            <!-- <firebase-auth-register /> -->
+          <div style="min-width: 300px; max-width: 90vw">
+            <v-card>
+              <slot name="default"></slot>
+              <v-list rounded elevation="4">
+                <template v-for="o in links">
+                  <v-list-item :to="o.link" v-if="route.path != o.link">
+                    {{ o.name }}
+                  </v-list-item>
+                </template>
+              </v-list>
+            </v-card>
           </div>
         </v-col>
       </v-row>
-    </div>
-
-    <!-- Logged -->
-    <div v-if="f.ready && f.user">
-      <v-app-layout navigation-class="bg-grey-lighten-3">
-        <template #main="bind">
-          <v-container style="max-width: 600px">
-            <slot name="main"></slot>
-          </v-container>
-        </template>
-
-        <template #navigation>
-          <div class="bg-grey-lighten-2 text-center py-10">Hello {{ f.user.name }}</div>
-          <v-nav
-            class="flex-grow-1"
-            :items="[
-              {
-                title: 'Criar conta',
-                icon: 'material-symbols:add',
-                bind: { to: '/division/new' },
-              },
-              {
-                title: 'Contas',
-                icon: 'material-symbols:list-alt-outline-sharp',
-                bind: { to: '/division' },
-              },
-              {
-                title: 'Meus dados',
-                icon: 'ic:sharp-manage-accounts',
-                bind: { to: '/account' },
-              },
-            ]"
-          />
-
-          <v-nav
-            :items="[
-              {
-                title: 'Sair',
-                icon: 'ic:outline-logout',
-                bind: {
-                  onClick() {
-                    f.auth.logout();
-                  },
-                },
-              },
-            ]"
-          />
-        </template>
-      </v-app-layout>
-    </div>
+    </v-defaults-provider>
   </v-app>
 </template>
 
 <script setup>
-import useFirebase from "@/composables/useFirebase";
-const f = useFirebase();
+const route = useRoute();
+
+const links = [
+  { name: "Login", link: "/auth" },
+  { name: "Esqueci minha senha", link: "/auth/password" },
+  { name: "Criar conta", link: "/auth/register" },
+];
+
+const defaults = {
+  VAlert: { rounded: 0 },
+};
 </script>
 
 <style>

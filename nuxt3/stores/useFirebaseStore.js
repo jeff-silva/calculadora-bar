@@ -1,3 +1,5 @@
+// TODO: Tratar este arquivo como um composable
+
 import { ref, reactive, onMounted } from "vue";
 import { defineStore } from "pinia";
 

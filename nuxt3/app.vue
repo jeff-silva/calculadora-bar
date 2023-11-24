@@ -9,7 +9,7 @@
 <script setup>
 const defaultsInput = {
   variant: "outlined",
-  hideDetails: true,
+  density: "compact",
 };
 
 const defaults = {

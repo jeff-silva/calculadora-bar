@@ -1,6 +1,6 @@
 <!-- TODO: Tornar tela da divisão visível, mas não editável -->
 <template>
-  <nuxt-layout name="auth">
+  <nuxt-layout name="app">
     <template #main>
       <v-form @submit.prevent="form.submit()">
         <v-expand-transition>

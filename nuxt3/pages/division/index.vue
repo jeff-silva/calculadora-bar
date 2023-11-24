@@ -1,5 +1,5 @@
 <template>
-  <nuxt-layout name="auth">
+  <nuxt-layout name="app">
     <template #main>
       <v-table class="elevation-5 rounded">
         <colgroup>
