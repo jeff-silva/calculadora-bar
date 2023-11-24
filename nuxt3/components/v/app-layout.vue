@@ -10,55 +10,8 @@
         </slot>
       </v-layout>
 
-      <v-layout v-if="props.ready && view.name != 'admin'" class="v-app-layout__bg-pattern">
-        <v-row>
-          <v-col cols="12" sm="6" class="d-none d-sm-flex"> </v-col>
-          <v-col cols="12" sm="6" class="pa-6">
-            <div class="w-100 h-100 d-flex align-center justify-center bg-white rounded-lg pa-6">
-              <div class="w-100">
-                <!-- view=login -->
-                <slot v-if="view.name == 'login'" name="login" v-bind="slotBind()"> Login </slot>
-
-                <!-- view=register -->
-                <slot v-if="view.name == 'register'" name="register" v-bind="slotBind()"> Register </slot>
-
-                <!-- view=password -->
-                <slot v-if="view.name == 'password'" name="password" v-bind="slotBind()"> Password </slot>
-
-                <div class="mt-4 d-flex flex-column" style="gap: 10px">
-                  <v-btn
-                    v-if="view.name != 'login'"
-                    block
-                    prepend-icon="material-symbols:key-outline"
-                    @click="view.set('login')"
-                  >
-                    Login
-                  </v-btn>
-                  <v-btn
-                    v-if="view.name != 'register'"
-                    block
-                    prepend-icon="material-symbols:person-add-outline"
-                    @click="view.set('register')"
-                  >
-                    Register
-                  </v-btn>
-                  <v-btn
-                    v-if="view.name != 'password'"
-                    block
-                    prepend-icon="fluent:key-reset-24-regular"
-                    @click="view.set('password')"
-                  >
-                    Password
-                  </v-btn>
-                </div>
-              </div>
-            </div>
-          </v-col>
-        </v-row>
-      </v-layout>
-
       <!-- view=admin -->
-      <v-layout class="rounded rounded-md" v-if="props.ready && view.name == 'admin'">
+      <v-layout class="rounded rounded-md" v-if="props.ready">
         <v-navigation-drawer
           v-model="nav.drawer"
           width="300"
@@ -71,38 +24,32 @@
 
         <!-- Mobile -->
         <v-main v-touch="layout.vTouch" v-if="display.mobile.value">
-          <v-slide-y-transition>
-            <div
-              :class="`d-flex align-center pa-3 ${props.headerClass}`"
-              style="position: fixed; top: 0; width: 100%; gap: 15px"
-              v-if="!display.mobile || layout.headerShow"
-            >
-              <v-defaults-provider :defaults="{ VBtn: { flat: true, size: 30 } }">
+          <div class="d-flex flex-column" style="height: 100vh">
+            <v-slide-y-transition>
+              <div :class="`d-flex align-center pa-2 ${props.headerClass}`" style="gap: 10px" v-if="layout.headerShow">
                 <v-btn icon="ci:hamburger" size="30" flat @click="nav.drawer = !nav.drawer" class="d-lg-none" />
                 <slot name="header" v-bind="slotBind()"></slot>
-              </v-defaults-provider>
+              </div>
+            </v-slide-y-transition>
+            <div style="flex-grow: 1; overflow-x: hidden; overflow-y: auto">
+              <slot name="main" v-bind="slotBind()"></slot>
             </div>
-          </v-slide-y-transition>
-
-          <v-slide-y-reverse-transition>
-            <div
-              :class="`${props.footerClass}`"
-              style="position: fixed; bottom: 0; width: 100%"
-              v-if="layout.footerShow"
-            >
-              <slot name="footer" v-bind="slotBind()"></slot>
-            </div>
-          </v-slide-y-reverse-transition>
-
-          <div :class="`pa-3 ${props.mainClass}`">
-            <slot name="main" v-bind="slotBind()"></slot>
+            <v-expand-transition>
+              <div
+                :class="`d-flex align-center pa-2 ${props.headerClass}`"
+                style="gap: 10px"
+                v-if="slots.footer && layout.footerShow"
+              >
+                <slot name="footer" v-bind="slotBind()"></slot>
+              </div>
+            </v-expand-transition>
           </div>
         </v-main>
 
         <!-- Desktop -->
         <v-main v-if="!display.mobile.value">
           <div class="d-flex flex-column" style="height: 100vh">
-            <div :class="`d-flex align-center pa-3 ${props.headerClass}`" style="gap: 15px">
+            <div :class="`d-flex align-center pa-3 ${props.headerClass}`" style="gap: 15px" v-if="slots.header">
               <v-defaults-provider :defaults="{ VBtn: { flat: true, size: 30 } }">
                 <slot name="header" v-bind="slotBind()"></slot>
               </v-defaults-provider>
@@ -121,7 +68,7 @@
 </template>
 
 <script setup>
-import { reactive, defineProps, defineEmits, defineExpose } from "vue";
+import { reactive, defineProps, defineEmits, defineExpose, useSlots } from "vue";
 
 const props = defineProps({
   ready: { type: Boolean, default: true },
@@ -133,6 +80,8 @@ const props = defineProps({
   mainClass: { type: String, default: "" },
   footerClass: { type: String, default: "" },
 });
+
+const slots = useSlots();
 
 const view = reactive({
   name: props.view,

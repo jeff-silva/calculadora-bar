@@ -2,6 +2,8 @@
   <nuxt-layout name="auth">
     <template #main>
       <pre>{{ f }}</pre>
+      <pre>{{ f }}</pre>
+      <pre>{{ f }}</pre>
     </template>
   </nuxt-layout>
 </template>
