@@ -1,0 +1,1 @@
+import{_ as o}from"./nuxt-layout.78da2617.js";import{_ as e}from"./_plugin-vue_export-helper.c27b6911.js";import{L as n,A as _,t as a,B as c}from"./entry.2d5fceb5.js";const r={};function s(m,x){const t=o;return a(),n(t,{name:"auth"},{main:_(()=>[c(" xxx ")]),_:1})}const u=e(r,[["render",s]]);export{u as default};
