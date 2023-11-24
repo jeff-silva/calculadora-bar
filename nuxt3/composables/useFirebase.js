@@ -92,9 +92,9 @@ export default (options = {}) => {
 
     r.user = {
       uid: user.uid,
+      name: (user.providerData[0] ? user.providerData[0]["displayName"] : null) || user.email,
       email: user.email,
       emailVerified: user.emailVerified,
-      displayName: user.providerData[0] ? user.providerData[0]["displayName"] : user.email,
       phoneNumber: user.providerData[0] ? user.providerData[0]["phoneNumber"] : "",
       photoURL: user.providerData[0] ? user.providerData[0]["photoURL"] : "",
     };

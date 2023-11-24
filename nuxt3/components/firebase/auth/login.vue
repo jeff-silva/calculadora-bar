@@ -12,29 +12,25 @@
         <v-btn type="submit">Login</v-btn>
       </v-col>
     </v-row>
-    <pre>{{ form }}</pre>
+    <!-- <pre>{{ form }}</pre> -->
+    <!-- <pre>{{ f }}</pre> -->
   </v-form>
 </template>
 
 <script setup>
 import { reactive, defineProps, defineEmits } from "vue";
-import f from "@/utils/firebase";
+// import f from "@/utils/firebase";
 
 const props = defineProps({});
 const emit = defineEmits(["update:modelValue"]);
 
+import useFirebase from "@/composables/useFirebase";
+const f = useFirebase();
+
 const form = reactive({
-  busy: false,
-  error: false,
   data: { email: "", password: "" },
   async submit() {
-    this.busy = true;
-    try {
-      console.log(await f.authLogin(this.data));
-    } catch (e) {
-      this.error = await f.authError(e);
-    }
-    this.busy = false;
+    await f.auth.login(this.data);
   },
 });
 </script>
