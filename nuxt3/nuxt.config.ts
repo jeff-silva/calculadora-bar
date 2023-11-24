@@ -45,7 +45,7 @@ export default defineNuxtConfig({
       })
     },
 
-    ["nuxt-security", {}],
+    // ["nuxt-security", {}],
   ],
   vite: {
     vue: {
