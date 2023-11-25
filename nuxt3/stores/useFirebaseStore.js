@@ -12,6 +12,7 @@ export default defineStore("firebase", () => {
   const config = useRuntimeConfig();
   fireApp.initializeApp(config.public.firebase);
   const _auth = fireAuth.getAuth();
+  const _storage = fireStorage.getStorage();
   const fireFirestoreDB = fireFirestore.getFirestore();
 
   const strategies = {
@@ -34,18 +35,25 @@ export default defineStore("firebase", () => {
     busy: false,
     success: false,
     error: false,
+
     async register(data = {}, strategy = "email") {
       data = { email: "", password: "", ...data };
       this.busy = true;
+      this.success = false;
+      this.error = false;
       try {
         if (typeof strategies["register"][strategy] != "undefined") {
           await strategies["register"][strategy](data);
+          this.success = true;
+          event.dispatch("registerSuccess");
         }
       } catch (err) {
-        this.error = this.exception(err);
+        this.error = await this.exception(err);
+        event.dispatch("registerError");
       }
       this.busy = false;
     },
+
     async login(data = {}, strategy = "email") {
       data = { email: "", password: "", ...data };
       this.busy = true;
@@ -63,11 +71,35 @@ export default defineStore("firebase", () => {
       }
       this.busy = false;
     },
+
     async logout() {
       const r = await fireAuth.signOut(_auth);
       event.dispatch("logout");
       return r;
     },
+
+    async update(data = {}) {
+      data = { name: "", email: "", phoneNumber: "", photoURL: "", ...data };
+
+      const profileUpdate = !(
+        data.name == _auth.currentUser.displayName && data.photoURL == _auth.currentUser.photoURL
+      );
+
+      const emailUpdate = !(data.email == _auth.currentUser.email);
+      const phoneNumberUpdate = !(data.phoneNumber == _auth.currentUser.phoneNumber);
+
+      if (profileUpdate) {
+        await fireAuth.updateProfile(_auth.currentUser, {
+          displayName: data.name,
+          photoURL: data.photoURL,
+        });
+      }
+
+      if (emailUpdate) {
+        await fireAuth.updateEmail(_auth.currentUser, data.email);
+      }
+    },
+
     async exception(err) {
       return { code: "", message: "", customData: {}, name: false, ...err };
     },
@@ -159,7 +191,20 @@ export default defineStore("firebase", () => {
     },
   });
 
-  const storage = reactive({});
+  const storage = reactive({
+    busy: false,
+    error: false,
+    async upload(file) {
+      if (file instanceof File) {
+        const storageRef = fireStorage.ref(_storage, file.name);
+        const snapshot = await fireStorage.uploadBytes(storageRef, file);
+        const url = await fireStorage.getDownloadURL(snapshot.ref);
+        return { url, snapshot };
+      }
+
+      return false;
+    },
+  });
 
   const event = reactive({
     events: [],

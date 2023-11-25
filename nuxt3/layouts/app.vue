@@ -13,7 +13,16 @@
       </template>
 
       <template #navigation>
-        <div v-if="f.user" class="bg-grey-lighten-2 text-center py-10">Hello {{ f.user.name }}</div>
+        <div v-if="f.user" class="bg-grey-lighten-2 text-center py-10">
+          <img
+            v-if="f.user.photoURL"
+            :src="f.user.photoURL"
+            alt=""
+            class="rounded-circle"
+            style="width: 100px; height: 100px; object-fit: cover"
+          />
+          <div>Hello {{ f.user.name }}</div>
+        </div>
         <v-nav
           v-if="f.user"
           class="flex-grow-1"

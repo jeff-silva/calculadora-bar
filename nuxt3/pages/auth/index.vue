@@ -19,6 +19,7 @@
           <v-text-field v-model="data.email" label="E-mail" />
           <v-text-field v-model="data.password" label="Senha" type="password" />
         </v-card-text>
+
         <v-card-actions>
           <v-spacer />
           <v-btn type="submit" text="Login" class="bg-primary" :loading="f.auth.busy" />

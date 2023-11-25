@@ -1,3 +1,4 @@
+<!-- TODO: Criar formulário para recuperação de senha -->
 <template>
   <nuxt-layout name="auth">
     <template #default>
