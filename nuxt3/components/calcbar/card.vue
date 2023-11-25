@@ -9,7 +9,7 @@
     </div>
 
     <v-defaults-provider :defaults="defaults">
-      <div class="d-flex align-items justify-end" style="background: #f7f7f708">
+      <div class="d-flex align-items justify-end" style="gap: 2px; background: #f7f7f708">
         <slot name="actions"></slot>
       </div>
     </v-defaults-provider>
@@ -24,6 +24,6 @@ const props = defineProps({
 });
 
 const defaults = {
-  VBtn: { rounded: 0 },
+  VBtn: { rounded: 0, height: 35 },
 };
 </script>

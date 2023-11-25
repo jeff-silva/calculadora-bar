@@ -1,3 +1,6 @@
+<!-- TODO: Salvar total, dados da divisão, data create e update -->
+<!-- TODO: Pedir permissão para editar -->
+
 <template>
   <calcbar-view v-if="!form.canEdit()" :form="form" />
 
@@ -25,6 +28,15 @@
             <v-text-field v-model="form.data.name" />
           </template>
           <template #actions>
+            <v-btn v-if="share.isSupported" color="success" @click="share.share({ title: form.data.name, url: '' })">
+              <v-icon icon="material-symbols:share" />
+              <div class="ms-2 d-none d-md-block">Share</div>
+            </v-btn>
+            <v-btn :color="clipboard.copied.value ? 'success' : null" @click="clipboard.copy(form.url)">
+              <v-icon :icon="clipboard.copied.value ? 'mdi-check' : 'material-symbols:content-copy-outline'" />
+              <div class="ms-2 d-none d-md-block">Copiar URL</div>
+            </v-btn>
+            <v-spacer />
             <v-btn type="submit" text="Salvar" prepend-icon="mdi-check" class="bg-primary" :loading="form.busy" />
           </template>
         </calcbar-card>
@@ -241,6 +253,10 @@ const actions = reactive({
   ],
 });
 
+import { useClipboard, useShare } from "@vueuse/core";
+const clipboard = useClipboard({ legacy: true });
+const share = useShare();
+
 import useFirebase from "@/composables/useFirebase";
 const f = useFirebase();
 
@@ -248,6 +264,7 @@ import useForm from "@/composables/useForm";
 
 const form = useForm({
   data: { uid: false, ownerUID: f.user.uid, name: "", users: [], purchases: [], admins: [] },
+  url: location.href,
   focus: false,
   async onSubmit() {
     emit("saved", await f.firestore.save("division", this.data));

@@ -1,6 +1,3 @@
-<!-- TODO: Botão de compartilhamento -->
-<!-- TODO: Salvar total, dados da divisão, data create e update -->
-<!-- TODO: Pedir permissão para editar -->
 <template>
   <nuxt-layout name="app">
     <template #main>
