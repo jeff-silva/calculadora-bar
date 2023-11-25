@@ -11,7 +11,7 @@
 
           <v-text-field label="Nome do evento" v-model="form.data.name" />
 
-          <v-card color="grey-lighten-3" title="Pessoas">
+          <v-card title="Pessoas">
             <v-card-text class="d-flex flex-column" style="gap: 20px">
               <div v-if="form.data.users.length == 0" class="text-center bg-grey-lighten-4 py-3 text-disabled rounded">
                 Nenhuma pessoa criada
@@ -33,7 +33,7 @@
           </v-card>
           <br />
 
-          <v-card color="grey-lighten-3" title="Gastos">
+          <v-card title="Gastos">
             <v-card-text>
               <div
                 v-if="form.data.purchases.length == 0"
@@ -98,10 +98,9 @@
             <v-btn type="submit" color="success" prepend-icon="mdi-check" :loading="form.busy">Salvar</v-btn>
           </div>
 
-          <v-card color="grey-lighten-3">
-            <v-card-title>Resultados</v-card-title>
+          <v-card title="Resultados">
             <v-card-text>
-              <div class="bg-white pa-3 text-right mb-2 elevation-1 rounded">Total: {{ form.result.total }}</div>
+              <div class="pa-3 text-right mb-2 elevation-1 rounded">Total: {{ form.result.total }}</div>
               <v-expansion-panels>
                 <template v-for="o in form.result.division">
                   <v-expansion-panel>

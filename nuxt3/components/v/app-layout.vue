@@ -76,7 +76,7 @@ const props = defineProps({
   defaultsProvider: { type: Object, default: () => ({}) },
   loadingClass: { type: String, default: "w-100 d-flex align-center justify-center" },
   navigationClass: { type: String, default: "" },
-  headerClass: { type: String, default: "bg-white" },
+  headerClass: { type: String, default: "" },
   mainClass: { type: String, default: "" },
   footerClass: { type: String, default: "" },
 });

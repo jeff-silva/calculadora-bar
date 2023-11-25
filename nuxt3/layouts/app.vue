@@ -69,11 +69,28 @@
           ]"
         />
       </template>
+
+      <template #header>
+        <v-spacer />
+        <v-btn
+          flat
+          @click="themeSwitcher.switch()"
+          :icon="
+            themeSwitcher.icon({
+              dark: 'material-symbols:clear-day-rounded',
+              light: 'material-symbols:dark-mode-rounded',
+            })
+          "
+        />
+      </template>
     </v-app-layout>
   </v-app>
 </template>
 
 <script setup>
+import useVuetifyThemeSwitcher from "@/composables/useVuetifyThemeSwitcher";
+const themeSwitcher = useVuetifyThemeSwitcher();
+
 import useFirebase from "@/composables/useFirebase";
 const f = useFirebase();
 
