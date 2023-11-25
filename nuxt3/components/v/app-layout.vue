@@ -10,7 +10,6 @@
         </slot>
       </v-layout>
 
-      <!-- view=admin -->
       <v-layout class="rounded rounded-md" v-if="props.ready">
         <v-navigation-drawer
           v-model="nav.drawer"
@@ -22,45 +21,15 @@
           <slot name="navigation" v-bind="slotBind()"></slot>
         </v-navigation-drawer>
 
-        <!-- Mobile -->
-        <v-main v-touch="layout.vTouch" v-if="display.mobile.value">
-          <div class="d-flex flex-column" style="height: 100vh">
-            <v-slide-y-transition>
-              <div :class="`d-flex align-center pa-2 ${props.headerClass}`" style="gap: 10px" v-if="layout.headerShow">
-                <v-btn icon="ci:hamburger" size="30" flat @click="nav.drawer = !nav.drawer" class="d-lg-none" />
-                <slot name="header" v-bind="slotBind()"></slot>
-              </div>
-            </v-slide-y-transition>
-            <div style="flex-grow: 1; overflow-x: hidden; overflow-y: auto">
-              <slot name="main" v-bind="slotBind()"></slot>
-            </div>
-            <v-expand-transition>
-              <div
-                :class="`d-flex align-center pa-2 ${props.headerClass}`"
-                style="gap: 10px"
-                v-if="slots.footer && layout.footerShow"
-              >
-                <slot name="footer" v-bind="slotBind()"></slot>
-              </div>
-            </v-expand-transition>
-          </div>
-        </v-main>
+        <!-- Main -->
+        <v-main style="height: 100vh; overflow: auto">
+          <v-app-bar :class="props.headerClass" density="compact">
+            <v-btn icon="ci:hamburger" size="30" flat @click="nav.drawer = !nav.drawer" class="d-lg-none" stacked />
+            <slot name="header" v-bind="slotBind()"></slot>
+          </v-app-bar>
+          <br />
 
-        <!-- Desktop -->
-        <v-main v-if="!display.mobile.value">
-          <div class="d-flex flex-column" style="height: 100vh">
-            <div :class="`d-flex align-center pa-3 ${props.headerClass}`" style="gap: 15px" v-if="slots.header">
-              <v-defaults-provider :defaults="{ VBtn: { flat: true, size: 30 } }">
-                <slot name="header" v-bind="slotBind()"></slot>
-              </v-defaults-provider>
-            </div>
-            <div :class="`flex-grow-1 pa-3 ${props.mainClass}`" style="overflow: auto">
-              <slot name="main" v-bind="slotBind()"></slot>
-            </div>
-            <div :class="`${props.footerClass}`">
-              <slot name="footer" v-bind="slotBind()"></slot>
-            </div>
-          </div>
+          <slot name="main" v-bind="slotBind()"></slot>
         </v-main>
       </v-layout>
     </v-defaults-provider>
@@ -68,11 +37,10 @@
 </template>
 
 <script setup>
-import { reactive, defineProps, defineEmits, defineExpose, useSlots } from "vue";
+import { reactive, defineProps, defineEmits, useSlots } from "vue";
 
 const props = defineProps({
   ready: { type: Boolean, default: true },
-  view: { type: String, default: "admin" },
   defaultsProvider: { type: Object, default: () => ({}) },
   loadingClass: { type: String, default: "w-100 d-flex align-center justify-center" },
   navigationClass: { type: String, default: "" },
@@ -83,15 +51,7 @@ const props = defineProps({
 
 const slots = useSlots();
 
-const view = reactive({
-  name: props.view,
-  set(name) {
-    emit("update:view", name);
-    view.name = name;
-  },
-});
-
-const emit = defineEmits(["update:view"]);
+const emit = defineEmits([]);
 
 import { useTitle } from "@vueuse/core";
 const title = useTitle();
@@ -137,12 +97,9 @@ const defaultsProvider = {
 const slotBind = (merge = {}) => {
   return {
     defaultsProvider,
-    view,
     ...merge,
   };
 };
-
-defineExpose({ view });
 </script>
 
 <style lang="scss">
@@ -155,31 +112,6 @@ defineExpose({ view });
   &__navigation .v-navigation-drawer__content {
     display: flex;
     flex-direction: column;
-  }
-
-  &__bg-pattern {
-    --s: 41px; /* control the size */
-    --c1: #f2c45a;
-    --c2: #5e8c6a;
-    --c3: #88a65e;
-
-    --_g: , var(--c1) 25%, var(--c2) 0 150deg, var(--c1) 0 240deg, #0000 0;
-    background: conic-gradient(from 60deg at calc(3.866 * var(--s)), var(--c2) 60deg, #0000 0) calc(1.366 * var(--s))
-        calc(1.366 * var(--s)),
-      conic-gradient(from 240deg at calc(0.866 * var(--s)), var(--c2) 60deg, #0000 0) calc(2.366 * var(--s))
-        calc(1.366 * var(--s)),
-      conic-gradient(at var(--s) var(--s), #0000 75%, var(--c1) 0) calc(1.366 * var(--s)) calc(var(--s) / -2),
-      conic-gradient(from 30deg at calc(-0.288 * var(--s)) 50%, #0000 120deg, var(--c3) 0),
-      conic-gradient(from 90deg at calc(3.732 * var(--s)) calc(1.866 * var(--s)), var(--c3) 120deg, #0000 0),
-      conic-gradient(
-        from -30deg at calc(3.732 * var(--s)) calc(0.866 * var(--s)),
-        var(--c3) 120deg,
-        var(--c1) 0 210deg,
-        #0000 0
-      ),
-      conic-gradient(from 150deg at calc(0.866 * var(--s)) var(--_g)),
-      conic-gradient(from -30deg at calc(2.866 * var(--s)) var(--_g)) var(--c3);
-    background-size: calc(4.732 * var(--s)) calc(2.732 * var(--s));
   }
 }
 </style>

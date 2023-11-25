@@ -5,7 +5,7 @@
     <!-- Loading -->
     <div v-if="!f.ready">Carregando</div>
 
-    <v-app-layout navigation-class="bg-grey-lighten-3" v-if="f.ready">
+    <v-app-layout v-if="f.ready">
       <template #main="bind">
         <v-container style="max-width: 600px">
           <slot name="main"></slot>
@@ -13,7 +13,7 @@
       </template>
 
       <template #navigation>
-        <div v-if="f.user" class="bg-grey-lighten-2 text-center py-10">
+        <div v-if="f.user" class="text-center py-10">
           <img
             v-if="f.user.photoURL"
             :src="f.user.photoURL"
@@ -21,29 +21,11 @@
             class="rounded-circle"
             style="width: 100px; height: 100px; object-fit: cover"
           />
-          <div>Hello {{ f.user.name }}</div>
+          <div>{{ f.user.name }}</div>
         </div>
-        <v-nav
-          v-if="f.user"
-          class="flex-grow-1"
-          :items="[
-            {
-              title: 'Criar conta',
-              icon: 'material-symbols:add',
-              bind: { to: '/division/new' },
-            },
-            {
-              title: 'Contas',
-              icon: 'material-symbols:list-alt-outline-sharp',
-              bind: { to: '/division' },
-            },
-            {
-              title: 'Meus dados',
-              icon: 'ic:sharp-manage-accounts',
-              bind: { to: '/account' },
-            },
-          ]"
-        />
+        <v-nav v-if="f.user && authNav.items.length > 0" class="flex-grow-1" :items="authNav.items" />
+
+        <!-- <pre>{{ authNav }}</pre> -->
 
         <v-nav
           v-if="f.user"
@@ -73,7 +55,8 @@
       <template #header>
         <v-spacer />
         <v-btn
-          flat
+          stacked
+          :rounded="0"
           @click="themeSwitcher.switch()"
           :icon="
             themeSwitcher.icon({
@@ -88,6 +71,8 @@
 </template>
 
 <script setup>
+import { reactive } from "vue";
+
 import useVuetifyThemeSwitcher from "@/composables/useVuetifyThemeSwitcher";
 const themeSwitcher = useVuetifyThemeSwitcher();
 
@@ -100,6 +85,48 @@ const authLogout = async () => {
   await f.auth.logout();
   location.reload();
 };
+
+const authNav = reactive({
+  items: [],
+  async refresh() {
+    if (!f.user) return [];
+
+    let items = [
+      {
+        title: "Criar conta",
+        icon: "material-symbols:add",
+        bind: { to: "/division/new" },
+      },
+      {
+        title: "Contas",
+        icon: "material-symbols:list-alt-outline-sharp",
+        children: [],
+      },
+      {
+        title: "Meus dados",
+        icon: "ic:sharp-manage-accounts",
+        bind: { to: "/account" },
+      },
+    ];
+
+    const resp = await f.firestore.search("division", [["ownerUID", "==", f.user.uid]]);
+
+    resp.data.map((item) => {
+      items[1].children.push({
+        title: item.name,
+        bind: { to: `/division/${item.uid}` },
+      });
+    });
+
+    this.items = items;
+  },
+});
+
+await authNav.refresh();
+
+f.event.on("onAuthStateChanged", async () => {
+  await authNav.refresh();
+});
 </script>
 
 <style>

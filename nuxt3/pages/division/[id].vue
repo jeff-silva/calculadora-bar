@@ -129,6 +129,10 @@
               </v-expansion-panels>
             </v-card-text>
           </v-card>
+
+          <v-bottom-navigation v-app>
+            <v-btn text="Salvar" stacked class="bg-primary" prepend-icon="mdi-check" />
+          </v-bottom-navigation>
         </v-form>
       </v-defaults-provider>
     </template>
