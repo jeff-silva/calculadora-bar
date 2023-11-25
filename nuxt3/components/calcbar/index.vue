@@ -1,5 +1,9 @@
 <template>
-  <v-form>
+  <v-form @submit.prevent="form.submit()">
+    <v-expand-transition>
+      <v-alert type="success" class="mb-6" v-if="form.success">Dados salvos</v-alert>
+    </v-expand-transition>
+
     <v-stepper v-model="tab.value" class="mx-1">
       <v-stepper-header>
         <v-stepper-item icon="ph:dot" value="info" subtitle="Info" />
@@ -19,45 +23,113 @@
             <v-text-field v-model="form.data.name" />
           </template>
           <template #actions>
-            <v-btn text="Salvar" prepend-icon="mdi-check" class="bg-primary" />
+            <v-btn type="submit" text="Salvar" prepend-icon="mdi-check" class="bg-primary" :loading="form.busy" />
           </template>
         </calcbar-card>
         <br />
 
+        <!-- Colaboradores -->
         <calcbar-card subtitle="Colaboradores" :card-text="false">
           <template #default>
-            <calcbar-loop v-model="form.data.admins">
+            <calcbar-loop
+              v-model="form.data.admins"
+              ref="adminsRef"
+              item-title="email"
+              :accordion="false"
+              :default="{ email: '' }"
+            >
               <template #item="bind">
-                <div>aa</div>
+                <v-text-field
+                  v-model="bind.item.email"
+                  label="E-mail"
+                  append-inner-icon="mdi-delete"
+                  @click:appendInner="bind.delete(bind.item)"
+                />
               </template>
             </calcbar-loop>
           </template>
           <template #actions>
-            <v-btn text="Salvar" prepend-icon="mdi-check" class="bg-primary" />
+            <v-btn text="Add" prepend-icon="mdi-plus" @click="component.getRef('adminsRef').add()" />
+            <v-btn type="submit" text="Salvar" prepend-icon="mdi-check" class="bg-primary" :loading="form.busy" />
           </template>
         </calcbar-card>
       </v-window-item>
 
       <!-- Tab Pessoas -->
       <v-window-item value="users">
-        <calcbar-card subtitle="Pessoas">
+        <calcbar-card subtitle="Pessoas" :card-text="false">
           <template #default>
-            <div>Aa</div>
+            <calcbar-loop
+              v-model="form.data.users"
+              ref="usersRef"
+              item-title="name"
+              :accordion="false"
+              :default="{ name: '' }"
+            >
+              <template #item="bind">
+                <v-text-field
+                  v-model="bind.item.name"
+                  label="Nome"
+                  append-inner-icon="mdi-delete"
+                  @click:appendInner="bind.delete(bind.item)"
+                />
+              </template>
+            </calcbar-loop>
           </template>
           <template #actions>
-            <v-btn text="Salvar" prepend-icon="mdi-check" class="bg-primary" />
+            <v-btn text="Add" prepend-icon="mdi-plus" @click="component.getRef('usersRef').add()" />
+            <v-btn type="submit" text="Salvar" prepend-icon="mdi-check" class="bg-primary" :loading="form.busy" />
           </template>
         </calcbar-card>
       </v-window-item>
 
       <!-- Tab Gastos -->
       <v-window-item value="purchases">
-        <calcbar-card subtitle="Gastos">
+        <calcbar-card subtitle="Gastos" :card-text="false">
           <template #default>
-            <div>Aa</div>
+            <calcbar-loop
+              v-model="form.data.purchases"
+              ref="purchasesRef"
+              item-title="name"
+              :default="{ name: '', amount: 0, quantity: 1, divideBy: [] }"
+            >
+              <template #item="bind">
+                <v-row>
+                  <v-col cols="12">
+                    <v-text-field v-model="bind.item.name" :hide-details="true" label="Nome" />
+                  </v-col>
+                  <v-col cols="12" md="8">
+                    <v-money v-model="bind.item.amount" :hide-details="true" label="Valor" reverse />
+                  </v-col>
+                  <v-col cols="12" md="4">
+                    <v-text-field
+                      v-model="bind.item.quantity"
+                      :hide-details="true"
+                      label="Quandidade"
+                      prepend-inner-icon="mdi-minus"
+                      append-inner-icon="mdi-plus"
+                      @click:prependInner="bind.item.quantity = Math.max(1, bind.item.quantity - 1)"
+                      @click:appendInner="bind.item.quantity = bind.item.quantity + 1"
+                    />
+                  </v-col>
+                  <v-col cols="12">
+                    <v-select
+                      v-model="bind.item.divideBy"
+                      label="Consumido por"
+                      multiple
+                      :items="form.data.users"
+                      item-value="uid"
+                      item-title="name"
+                      :hide-details="true"
+                    />
+                  </v-col>
+                </v-row>
+              </template>
+            </calcbar-loop>
           </template>
           <template #actions>
-            <v-btn text="Salvar" prepend-icon="mdi-check" class="bg-primary" />
+            <v-btn text="Add" prepend-icon="mdi-plus" @click="component.getRef('purchasesRef').add()" />
+            <v-btn type="submit" text="Salvar" prepend-icon="mdi-check" class="bg-primary" :loading="form.busy" />
           </template>
         </calcbar-card>
       </v-window-item>
@@ -68,15 +140,12 @@
       <template #default>
         <div>Aa</div>
       </template>
-      <template #actions>
-        <v-btn text="Salvar" prepend-icon="mdi-check" class="bg-primary" />
-      </template>
     </calcbar-card>
 
-    <div class="pa-3" style="position: fixed; bottom: 100px; right: 0; z-index: 9">
+    <div class="pa-6" style="position: fixed; bottom: 0; right: 0; z-index: 9">
       <v-menu location="top right" offset="10" :close-on-content-click="false">
         <template #activator="bind">
-          <v-btn icon="solar:hamburger-menu-linear" v-bind="bind.props" />
+          <v-btn icon="mdi-dots-horizontal" v-bind="bind.props" />
         </template>
 
         <div class="d-flex flex-column" style="gap: 10px">
@@ -91,18 +160,25 @@
       </v-menu>
     </div>
 
-    <pre>{{ form }}</pre>
+    <!-- <pre>{{ form }}</pre> -->
   </v-form>
 </template>
 
 <script setup>
-import { reactive, defineProps, defineEmits, watch, computed } from "vue";
+import { reactive, defineProps, defineEmits, watch, computed, getCurrentInstance } from "vue";
 
 const props = defineProps({
   uid: { type: [String], default: "" },
 });
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue", "saved"]);
+
+const component = {
+  inst: getCurrentInstance(),
+  getRef(name) {
+    return this.inst.ctx.$refs[name];
+  },
+};
 
 const tab = reactive({
   value: "info",
@@ -137,16 +213,6 @@ const actions = reactive({
         active: computed(() => tab.value == "purchases"),
       },
     },
-    {
-      text: "Salvar",
-      bind: {
-        icon: "mdi-check",
-        class: "bg-primary",
-        onClick() {
-          console.log("aaa");
-        },
-      },
-    },
   ],
 });
 
@@ -158,8 +224,7 @@ import useForm from "@/composables/useForm";
 const form = useForm({
   data: { uid: false, ownerUID: f.user.uid, name: "", users: [], purchases: [], admins: [] },
   async onSubmit() {
-    const result = await f.firestore.save("division", this.data);
-    router.push(`/division/${result.uid}`);
+    emit("saved", await f.firestore.save("division", this.data));
   },
   uid() {
     return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>

@@ -22,6 +22,9 @@ export default (options = {}) => {
       try {
         this.response = (await this.onSubmit()) || true;
         this.success = true;
+        setInterval(() => {
+          this.success = false;
+        }, 3000);
       } catch (err) {
         this.error = this.onError(err) || true;
       }

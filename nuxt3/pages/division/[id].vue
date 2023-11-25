@@ -5,12 +5,9 @@
 <template>
   <nuxt-layout name="app">
     <template #main>
-      <calcbar :uid="route.params.id" />
-      <v-form @submit.prevent="form.submit()" v-if="can.edit()">
-        <v-expand-transition>
-          <v-alert type="success" class="mb-6" v-if="form.success">Dados salvos</v-alert>
-        </v-expand-transition>
+      <calcbar :uid="route.params.id" @saved="router.push(`/division/${$event.uid}`)" />
 
+      <v-form @submit.prevent="form.submit()" v-if="can.edit()" style="display: none">
         <v-window v-model="tab.value">
           <v-window-item value="info">
             <v-card subtitle="Informações principais">
@@ -158,12 +155,12 @@
           </v-card-text>
         </v-card>
 
-        <v-bottom-navigation>
+        <!-- <v-bottom-navigation>
           <v-btn text="Info" stacked prepend-icon="material-symbols:info-outline" @click="tab.set('info')" />
           <v-btn text="Pessoas" stacked prepend-icon="material-symbols:frame-person" @click="tab.set('users')" />
           <v-btn text="Gastos" stacked prepend-icon="solar:chat-round-money-outline" @click="tab.set('purchases')" />
           <v-btn text="Salvar" stacked type="submit" color="primary" prepend-icon="mdi-check" />
-        </v-bottom-navigation>
+        </v-bottom-navigation> -->
       </v-form>
 
       <div v-if="!can.edit()">
