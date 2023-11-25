@@ -45,6 +45,12 @@
         <!-- Colaboradores -->
         <calcbar-card subtitle="Colaboradores" :card-text="false">
           <template #default>
+            <v-card-text>
+              <p>
+                Colaboradores podem ajudar a editar gastos e pessoas. Insira o e-mail do colaborador e ao acessar esta
+                página, ele poderá editar.
+              </p>
+            </v-card-text>
             <calcbar-loop
               v-model="form.data.admins"
               ref="adminsRef"
@@ -73,6 +79,7 @@
       <v-window-item value="users">
         <calcbar-card subtitle="Pessoas" :card-text="false">
           <template #default>
+            <v-card-text> Gerencie todas as pessoas que participarão da divisão </v-card-text>
             <calcbar-loop
               v-model="form.data.users"
               ref="usersRef"
@@ -101,6 +108,7 @@
       <v-window-item value="purchases">
         <calcbar-card subtitle="Gastos" :card-text="false">
           <template #default>
+            <v-card-text> Informe todos os itens que serão consumidos. </v-card-text>
             <calcbar-loop
               v-model="form.data.purchases"
               ref="purchasesRef"
