@@ -1,10 +1,11 @@
-<!-- TODO: Só pode editar se for proprietário, do contrário, só com permissão -->
 <!-- TODO: Botão de compartilhamento -->
-<!-- TODO: Melhorar interface -->
 <!-- TODO: Salvar total, dados da divisão, data create e update -->
+<!-- TODO: Separar em componentes para controlar melhor os pedaços de interface -->
+<!-- TODO: Pedir permissão para editar -->
 <template>
   <nuxt-layout name="app">
     <template #main>
+      <calcbar :uid="route.params.id" />
       <v-form @submit.prevent="form.submit()" v-if="can.edit()">
         <v-expand-transition>
           <v-alert type="success" class="mb-6" v-if="form.success">Dados salvos</v-alert>
