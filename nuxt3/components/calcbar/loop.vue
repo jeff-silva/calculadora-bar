@@ -2,9 +2,9 @@
   <div>
     <div v-if="items.data.length == 0" class="text-center text-disabled py-3">Nenhum item criado</div>
 
-    <v-expansion-panels v-model="items.focus" :static="true" variant="accordion" v-if="props.accordion">
+    <v-expansion-panels v-if="props.accordion" v-model="items.focus" :static="true" variant="accordion">
       <template v-for="(o, i) in items.data">
-        <v-expansion-panel :title="o[props.itemTitle] || `Item #${i + 1}`" :value="o">
+        <v-expansion-panel :title="o[props.itemTitle] || `Item #${i + 1}`" :value="o" rounded="0">
           <v-expansion-panel-text style="margin: -8px -24px -18px">
             <div class="pa-3 pt-6">
               <slot name="item" v-bind="slotBind({ item: o, index: i })"></slot>

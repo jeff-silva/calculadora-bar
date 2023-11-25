@@ -1,16 +1,18 @@
 <template>
-  <v-form @submit.prevent="form.submit()">
+  <calcbar-view v-if="!form.canEdit()" :form="form" />
+
+  <v-form @submit.prevent="form.submit()" v-if="form.canEdit()">
     <v-expand-transition>
       <v-alert type="success" class="mb-6" v-if="form.success">Dados salvos</v-alert>
     </v-expand-transition>
 
     <v-stepper v-model="tab.value" class="mx-1">
       <v-stepper-header>
-        <v-stepper-item icon="ph:dot" value="info" subtitle="Info" />
+        <v-stepper-item :editable="true" type="button" edit-icon="mdi-check" value="info" subtitle="Info" />
         <v-divider />
-        <v-stepper-item icon="ph:dot" value="users" subtitle="Pessoas" />
+        <v-stepper-item :editable="true" type="button" edit-icon="mdi-check" value="users" subtitle="Pessoas" />
         <v-divider />
-        <v-stepper-item icon="ph:dot" value="purchases" subtitle="Gastos" />
+        <v-stepper-item :editable="true" type="button" edit-icon="mdi-check" value="purchases" subtitle="Gastos" />
       </v-stepper-header>
     </v-stepper>
     <br />
@@ -136,16 +138,39 @@
     </v-window>
     <br />
 
-    <calcbar-card subtitle="Resultado">
+    <calcbar-card subtitle="Resultado" :card-text="false">
       <template #default>
-        <div>Aa</div>
+        <v-table>
+          <colgroup>
+            <col width="*" />
+            <col width="100" />
+          </colgroup>
+          <tbody>
+            <template v-for="o in form.result.division">
+              <tr>
+                <td>{{ o.user.name }}</td>
+                <td>
+                  <small>{{ format.money(o.total) }}</small>
+                </td>
+              </tr>
+            </template>
+            <tr>
+              <td class="text-right">Total:</td>
+              <td>
+                <small>{{ format.money(form.result.total) }}</small>
+              </td>
+            </tr>
+          </tbody>
+        </v-table>
       </template>
     </calcbar-card>
+
+    <br /><br /><br />
 
     <div class="pa-6" style="position: fixed; bottom: 0; right: 0; z-index: 9">
       <v-menu location="top right" offset="10" :close-on-content-click="false">
         <template #activator="bind">
-          <v-btn icon="mdi-dots-horizontal" v-bind="bind.props" />
+          <v-btn icon="mdi-dots-horizontal" v-bind="bind.props" color="success" />
         </template>
 
         <div class="d-flex flex-column" style="gap: 10px">
@@ -223,6 +248,7 @@ import useForm from "@/composables/useForm";
 
 const form = useForm({
   data: { uid: false, ownerUID: f.user.uid, name: "", users: [], purchases: [], admins: [] },
+  focus: false,
   async onSubmit() {
     emit("saved", await f.firestore.save("division", this.data));
   },
@@ -231,7 +257,12 @@ const form = useForm({
       (c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))).toString(16)
     );
   },
-  focus: false,
+  canEdit() {
+    if (!f.user) return false;
+    if (form.data.ownerUID == f.user.uid) return true;
+    if (form.data.admins.filter((a) => a.email == f.user.email)) return true;
+    return false;
+  },
   async load() {
     if (!isNaN(props.uid)) return;
 
