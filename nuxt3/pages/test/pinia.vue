@@ -15,6 +15,6 @@
 <script setup>
 import { reactive } from "vue";
 
-import useFirebaseStore from "@/stores/useFirebaseStore";
-const f = useFirebaseStore();
+import useFirebase from "@/composables/useFirebase";
+const f = useFirebase();
 </script>

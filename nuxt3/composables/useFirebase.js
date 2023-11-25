@@ -1,6 +1,4 @@
-// TODO: Tratar este arquivo como um composable
-
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive } from "vue";
 import { defineStore } from "pinia";
 
 import * as fireApp from "firebase/app";

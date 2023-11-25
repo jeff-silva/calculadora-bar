@@ -38,8 +38,8 @@ const props = defineProps({
 
 const emit = defineEmits(["update:modelValue"]);
 
-import useFirebaseStore from "@/stores/useFirebaseStore";
-const f = useFirebaseStore();
+import useFirebase from "@/composables/useFirebase";
+const f = useFirebase();
 
 const division = reactive({
   query: {

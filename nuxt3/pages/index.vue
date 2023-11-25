@@ -3,7 +3,7 @@
     <template #main>
       <!-- <app-calculadora-bar /> -->
 
-      <v-card title="Crie sua conta" subtitle="É rapidinho..." elevation="3">
+      <v-card title="Crie sua conta" subtitle="É rapidinho..." elevation="3" v-if="!f.user">
         <v-card-text>
           <p>
             Só precisa informar seu e-mail e criar uma senha para ter acesso total à ferramenta, criar, alterar e
@@ -21,6 +21,6 @@
 </template>
 
 <script setup>
-import useFirebaseStore from "@/stores/useFirebaseStore";
-const f = useFirebaseStore();
+import useFirebase from "@/composables/useFirebase";
+const f = useFirebase();
 </script>

@@ -143,8 +143,8 @@ import format from "@/utils/format";
 const route = useRoute();
 const router = useRouter();
 
-import useFirebaseStore from "@/stores/useFirebaseStore";
-const f = useFirebaseStore();
+import useFirebase from "@/composables/useFirebase";
+const f = useFirebase();
 
 const props = defineProps({
   modelValue: {

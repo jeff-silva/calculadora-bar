@@ -1,8 +1,8 @@
-import useFirebaseStore from "@/stores/useFirebaseStore";
+import useFirebase from "@/composables/useFirebase";
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
   if (to.path == "/auth") return;
-  const f = useFirebaseStore();
+  const f = useFirebase();
 
   const logged = await new Promise((resolve, reject) => {
     if (f.ready) {

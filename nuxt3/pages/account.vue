@@ -20,8 +20,8 @@ import { reactive } from "vue";
 
 definePageMeta({ middleware: ["auth"] });
 
-import useFirebaseStore from "@/stores/useFirebaseStore";
-const f = useFirebaseStore();
+import useFirebase from "@/composables/useFirebase";
+const f = useFirebase();
 
 import useForm from "@/composables/useForm";
 const form = useForm({

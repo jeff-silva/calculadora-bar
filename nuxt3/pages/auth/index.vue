@@ -39,8 +39,8 @@ const data = reactive({
   password: "",
 });
 
-import useFirebaseStore from "@/stores/useFirebaseStore";
-const f = useFirebaseStore();
+import useFirebase from "@/composables/useFirebase";
+const f = useFirebase();
 
 f.event.on("loginSuccess", () => {
   router.push(route.query.redirect || "/");
