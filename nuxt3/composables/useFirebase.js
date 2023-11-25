@@ -187,6 +187,10 @@ export default defineStore("firebase", () => {
       this.busy = false;
       return { query, data, prev, next };
     },
+    async onSnapshot(collection, uid, callback) {
+      const doc = fireFirestore.doc(fireFirestoreDB, collection, uid);
+      return fireFirestore.onSnapshot(doc, callback);
+    },
   });
 
   const storage = reactive({

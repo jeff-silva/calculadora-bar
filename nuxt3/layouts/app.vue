@@ -1,5 +1,3 @@
-<!-- TODO: Ao fazer logout, página não redireciona -->
-
 <template>
   <v-app>
     <!-- Loading -->
