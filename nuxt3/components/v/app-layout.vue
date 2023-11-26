@@ -27,7 +27,6 @@
             <v-btn icon="ci:hamburger" size="30" flat @click="nav.drawer = !nav.drawer" class="d-lg-none" stacked />
             <slot name="header" v-bind="slotBind()"></slot>
           </v-app-bar>
-          <br />
 
           <slot name="main" v-bind="slotBind()"></slot>
         </v-main>

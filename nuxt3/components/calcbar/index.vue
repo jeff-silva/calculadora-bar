@@ -25,7 +25,7 @@
       <v-window-item value="info">
         <calcbar-card subtitle="Informações Principais">
           <template #default>
-            <v-text-field v-model="form.data.name" />
+            <v-text-field v-model="form.data.name" label="Nome do evento" />
           </template>
           <template #actions>
             <v-btn v-if="share.isSupported" color="success" @click="share.share({ title: form.data.name, url: '' })">
@@ -204,8 +204,6 @@
         </div>
       </v-menu>
     </div>
-
-    <!-- <pre>{{ form }}</pre> -->
   </v-form>
 </template>
 
@@ -274,8 +272,13 @@ const form = useForm({
   data: { uid: false, ownerUID: f.user.uid, name: "", users: [], purchases: [], admins: [] },
   url: location.href,
   focus: false,
+  preventSnap: false,
   async onSubmit() {
+    this.preventSnap = true;
     emit("saved", await f.firestore.save("division", this.data));
+    setTimeout(() => {
+      this.preventSnap = false;
+    }, 1000);
   },
   uid() {
     return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
@@ -294,9 +297,10 @@ const form = useForm({
     const division = await f.firestore.find("division", props.uid);
     form.fill({ ...form.data, ...division });
 
-    // f.firestore.onSnapshot("division", props.uid, (doc) => {
-    //   form.fill({ ...form.data, ...doc.data() });
-    // });
+    f.firestore.onSnapshot("division", props.uid, (doc) => {
+      if (this.preventSnap) return;
+      form.fill({ ...form.data, ...doc.data() });
+    });
   },
   async userAdd() {
     const uid = this.uid();
