@@ -46,7 +46,7 @@ export default defineNuxtConfig({
     },
 
     // https://nuxt.com/modules/security
-    ["nuxt-security", {}],
+    // ["nuxt-security", {}],
 
     // https://nuxt.com/modules/pinia
     ["@pinia/nuxt", {}],
