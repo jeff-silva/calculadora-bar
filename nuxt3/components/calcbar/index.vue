@@ -69,7 +69,7 @@
             </calcbar-loop>
           </template>
           <template #actions>
-            <v-btn text="Add" prepend-icon="mdi-plus" @click="component.getRef('adminsRef').add()" />
+            <v-btn text="Add" prepend-icon="mdi-plus" @click="adminsRef.add()" />
             <v-btn type="submit" text="Salvar" prepend-icon="mdi-check" class="bg-primary" :loading="form.busy" />
           </template>
         </calcbar-card>
@@ -98,7 +98,7 @@
             </calcbar-loop>
           </template>
           <template #actions>
-            <v-btn text="Add" prepend-icon="mdi-plus" @click="component.getRef('usersRef').add()" />
+            <v-btn text="Add" prepend-icon="mdi-plus" @click="usersRef.add()" />
             <v-btn type="submit" text="Salvar" prepend-icon="mdi-check" class="bg-primary" :loading="form.busy" />
           </template>
         </calcbar-card>
@@ -150,7 +150,7 @@
             </calcbar-loop>
           </template>
           <template #actions>
-            <v-btn text="Add" prepend-icon="mdi-plus" @click="component.getRef('purchasesRef').add()" />
+            <v-btn text="Add" prepend-icon="mdi-plus" @click="purchasesRef.add()" />
             <v-btn type="submit" text="Salvar" prepend-icon="mdi-check" class="bg-primary" :loading="form.busy" />
           </template>
         </calcbar-card>
@@ -208,7 +208,11 @@
 </template>
 
 <script setup>
-import { reactive, defineProps, defineEmits, watch, computed, getCurrentInstance } from "vue";
+import { ref, reactive, defineProps, defineEmits, watch, computed, getCurrentInstance } from "vue";
+
+const adminsRef = ref(null);
+const usersRef = ref(null);
+const purchasesRef = ref(null);
 
 const props = defineProps({
   uid: { type: [String], default: "" },
