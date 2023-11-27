@@ -45,8 +45,16 @@ export default defineNuxtConfig({
       })
     },
 
-    // ["nuxt-security", {}],
+    // https://nuxt.com/modules/security
+    ["nuxt-security", {}],
+
+    // https://nuxt.com/modules/pinia
     ["@pinia/nuxt", {}],
+
+    // https://nuxt.com/modules/vite-pwa-nuxt
+    ["@vite-pwa/nuxt", {
+      client: { installPrompt: true },
+    }],
   ],
   vite: {
     vue: {

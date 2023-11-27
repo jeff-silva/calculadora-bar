@@ -1,5 +1,6 @@
 <template>
   <div>
+    <vite-pwa-manifest />
     <v-defaults-provider :defaults="defaults">
       <nuxt-page />
     </v-defaults-provider>
