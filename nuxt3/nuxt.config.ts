@@ -53,7 +53,32 @@ export default defineNuxtConfig({
 
     // https://nuxt.com/modules/vite-pwa-nuxt
     ["@vite-pwa/nuxt", {
-      client: { installPrompt: true },
+      registerType: 'autoUpdate',
+      manifest: {
+        name: 'Nuxt Vite PWA',
+        short_name: 'NuxtVitePWA',
+        theme_color: '#ffffff',
+        icons: [
+          {
+            src: './public/favicon.png',
+            sizes: '32x32',
+            type: 'image/png',
+          },
+        ],
+      },
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
+      },
+      client: {
+        installPrompt: true,
+        periodicSyncForUpdates: 20,
+      },
+      devOptions: {
+        enabled: true,
+        suppressWarnings: true,
+        navigateFallbackAllowlist: [/^\/$/],
+        type: 'module',
+      },
     }],
   ],
   vite: {

@@ -1,0 +1,1 @@
+{"name":"Nuxt Vite PWA","short_name":"NuxtVitePWA","start_url":"/calculadora-bar/","display":"standalone","background_color":"#ffffff","lang":"en","scope":"/calculadora-bar/","theme_color":"#ffffff","icons":[{"src":"./public/favicon.png","sizes":"32x32","type":"image/png"}]}
